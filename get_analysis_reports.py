@@ -4,7 +4,7 @@ import requests
 
 def main():
     directory_path = 'koodous_data'
-    params = {'search': 'detected:true AND analyzed:true AND rating: <-13'}
+    params = {'search': 'detected:true AND analyzed:true AND rating: <-3'}
     
     page_count = 0
     next_url = 'First'
