@@ -1,8 +1,8 @@
 import json
 import requests
+import sys
 
-
-def main():
+def main(start_page):
     directory_path = 'koodous_data'
     params = {'search': 'detected:true AND analyzed:true AND rating: <-3'}
     
@@ -16,6 +16,10 @@ def main():
             r = requests.get(url="https://api.koodous.com/apks", params=params)
         else:
             r = requests.get(url=next_url)
+            
+        if start_page > page_count:
+            page_count += 1
+            continue
             
         results = r.json()['results']
         next_url = r.json()['next']
@@ -33,4 +37,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    start_page = int(sys.argv[1])
+    main(start_page)
