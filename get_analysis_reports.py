@@ -1,11 +1,12 @@
 import json
 import requests
-import sys
+import glob
 
-def main(start_page):
+def main():
     directory_path = 'koodous_data'
     params = {'search': 'detected:true AND analyzed:true AND rating: <-3'}
     
+    sha256_list = [r.split('/')[-1].split('.json')[0] for r in glob.glob(directory_path+'/*.json')]
     page_count = 0
     next_url = 'First'
 
@@ -17,14 +18,14 @@ def main(start_page):
         else:
             r = requests.get(url=next_url)
             
-        if start_page > page_count:
-            page_count += 1
-            continue
-            
         results = r.json()['results']
         next_url = r.json()['next']
         for result in results:
             sha256 = result['sha256']
+            
+            if sha256 in sha256_list:
+                continue
+            
             url_koodous = "https://api.koodous.com/apks/%s/analysis" % sha256
             r = requests.get(url=url_koodous)
             if r.json()['androguard'] != None: # androguardによる解析結果があるか
@@ -37,5 +38,4 @@ def main(start_page):
 
 
 if __name__ == '__main__':
-    start_page = int(sys.argv[1])
-    main(start_page)
+    main()
