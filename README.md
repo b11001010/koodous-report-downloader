@@ -3,7 +3,7 @@ Get apk's analysis report from https://koodous.com/
 
 ## Requirement
 
-requests
+`pip install requests`
 
 ## Usage
 
